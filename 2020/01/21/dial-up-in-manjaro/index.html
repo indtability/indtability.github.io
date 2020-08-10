@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Manjaro 通过无线网络拨号上网 | Journal to me</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="原因又开始写博客了，前几次总是想着正式一点，写一些大而全的东西，目标定得太高就会难以为继。这次换一个目标，写一些小而碎的东西。 在折腾，学习过程中遇到的困难，花了时间去搜索，解决或没解决的问题，一些算不上是知识的trick之类的东西，都记录下来，算是给我记性的一点补充，有可能的话，也希望能给不小心找到这里的人提供一点帮助。 这次是在linux下拨号上网的方法。 前段时间换了Manjaro作为主力系">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Manjaro 通过无线网络拨号上网">
+<meta property="og:url" content="http://yoursite.com/2020/01/21/dial-up-in-manjaro/index.html">
+<meta property="og:site_name" content="Journal to me">
+<meta property="og:description" content="原因又开始写博客了，前几次总是想着正式一点，写一些大而全的东西，目标定得太高就会难以为继。这次换一个目标，写一些小而碎的东西。 在折腾，学习过程中遇到的困难，花了时间去搜索，解决或没解决的问题，一些算不上是知识的trick之类的东西，都记录下来，算是给我记性的一点补充，有可能的话，也希望能给不小心找到这里的人提供一点帮助。 这次是在linux下拨号上网的方法。 前段时间换了Manjaro作为主力系">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-01-21T11:45:12.000Z">
+<meta property="article:modified_time" content="2020-08-10T12:59:31.314Z">
+<meta property="article:author" content="Lei">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Journal to me" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.0.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Journal to me</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-dial-up-in-manjaro" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/01/21/dial-up-in-manjaro/" class="article-date">
+  <time datetime="2020-01-21T11:45:12.000Z" itemprop="datePublished">2020-01-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Manjaro 通过无线网络拨号上网
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>又开始写博客了，前几次总是想着正式一点，写一些大而全的东西，目标定得太高就会难以为继。这次换一个目标，写一些小而碎的东西。</p>
+<p>在折腾，学习过程中遇到的困难，花了时间去搜索，解决或没解决的问题，一些算不上是知识的trick之类的东西，都记录下来，算是给我记性的一点补充，有可能的话，也希望能给不小心找到这里的人提供一点帮助。</p>
+<p>这次是在linux下拨号上网的方法。</p>
+<p>前段时间换了Manjaro作为主力系统，但校园网使用pppoe拨号验证，KDE似乎没打算让用户在无线网络下拨号，新建了一个DSL，却完全找不到连接的选项，手头没有网线，也不打算用网线，上网搜了一下，似乎没人觉得这是个问题，都说用pppd就能拨号了，网上方法有很多，但似乎都是用不同的方法配置和调用pppd。</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><p>在<code>/etc/ppp/peers/</code>目录下新建一个文件，这里命名为provider，内容如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /etc/ppp/peers/provider</span></span><br><span class="line"><span class="comment"># 用ip link 查看无线网卡名称，替换wlp3s0</span></span><br><span class="line">plugin rp-pppoe.so wlp3s0</span><br><span class="line">hide-password</span><br><span class="line">noauth</span><br><span class="line">defaultroute</span><br><span class="line">noipdefault</span><br><span class="line">usepeerdns</span><br><span class="line"><span class="comment"># username是拨号用的用户名</span></span><br><span class="line">user <span class="string">&quot;username&quot;</span></span><br><span class="line">name <span class="string">&quot;username&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>修改<code>/etc/ppp/pap-secrets</code>添加一行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /etc/ppp/pap-secrets</span></span><br><span class="line"><span class="comment"># username是拨号用的用户名，password是拨号的密码</span></span><br><span class="line"><span class="string">&quot;username&quot;</span>        *       <span class="string">&quot;password&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后执行<code>pppd call provider</code>就可以了。需要root权限。</p>
+<p>方法似乎没有问题，输出和日志都说连接上了，却始终不能上网，我算是个newbie，对linux不太熟，甚至开始怀疑pppd有问题，抓了Manjaro和Windows上拨号的包，对着PPPoE的RFC上去查。哈哈，这算是新手最常犯的错误，得不到想要的结果就怀疑是底层有问题。</p>
+<p>pppoe是在ip层下的协议，Windows上的拨号和pppd在拨号成功后都会虚拟一个网络适配器，拨号成功却不能上网的原因在于没有配置好路由表，数据包依然发往无线适配器而不是虚拟的PPPoE适配器，因此，修改一下路由表就能解决问题。</p>
+<p>执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 用ip addr查看拨号产生的虚拟适配器和网关地址，分别替换下面的ppp0和10.101.0.1</span></span><br><span class="line">ip route add default via 10.101.0.1 dev ppp0</span><br></pre></td></tr></table></figure>
+
+<p>然后就可以上网了</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/01/21/dial-up-in-manjaro/" data-id="ckdoiwso00003filvf8hr78ag" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/01/24/tencent-tim-in-manjaro/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          在 Manjaro 中使用 Tim
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/01/20/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/08/10/auto-lock-after-auto-login-with-KDE-and-SDDM/">SDDM 和 KDE 下自动登录并锁屏</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/16/install-linux-ck-kernal-and-nvidia-driver-in-manjaro/">在 manjaro 上安装 linux-ck 和 nvidia 驱动</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/27/how-to-improve-english-chinese/">读书笔记：怎样改进英式中文——论中文的常态与病态</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/27/gpg-keyserver-receive-failed-configuration-error/">gpg: keyserver receive failed: Configuration error</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/24/tencent-tim-in-manjaro/">在 Manjaro 中使用 Tim</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Lei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

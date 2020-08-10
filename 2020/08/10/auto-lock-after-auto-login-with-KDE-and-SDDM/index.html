@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>SDDM 和 KDE 下自动登录并锁屏 | Journal to me</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="TL;DR自动登录在系统设置里找到 Login Screen (SDDM)， 切到 Advanced 选项卡，设置自动登录即可。 或者在 &#x2F;etc&#x2F;sddm.conf 里添加 123[Autologin]Session&#x3D;plasmaUser&#x3D;YOURNAME  自动锁屏在 $HOME&#x2F;.xprofile 里加入一行 1export DESKTOP_LOCKED&#x3D;tru">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SDDM 和 KDE 下自动登录并锁屏">
+<meta property="og:url" content="http://yoursite.com/2020/08/10/auto-lock-after-auto-login-with-KDE-and-SDDM/index.html">
+<meta property="og:site_name" content="Journal to me">
+<meta property="og:description" content="TL;DR自动登录在系统设置里找到 Login Screen (SDDM)， 切到 Advanced 选项卡，设置自动登录即可。 或者在 &#x2F;etc&#x2F;sddm.conf 里添加 123[Autologin]Session&#x3D;plasmaUser&#x3D;YOURNAME  自动锁屏在 $HOME&#x2F;.xprofile 里加入一行 1export DESKTOP_LOCKED&#x3D;tru">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-08-10T06:02:04.000Z">
+<meta property="article:modified_time" content="2020-08-10T12:59:31.314Z">
+<meta property="article:author" content="Lei">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Journal to me" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.0.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Journal to me</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-auto-lock-after-auto-login-with-KDE-and-SDDM" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/08/10/auto-lock-after-auto-login-with-KDE-and-SDDM/" class="article-date">
+  <time datetime="2020-08-10T06:02:04.000Z" itemprop="datePublished">2020-08-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      SDDM 和 KDE 下自动登录并锁屏
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR"></a>TL;DR</h2><h4 id="自动登录"><a href="#自动登录" class="headerlink" title="自动登录"></a>自动登录</h4><p>在系统设置里找到 Login Screen (SDDM)， 切到 Advanced 选项卡，设置自动登录即可。</p>
+<p>或者在 <code>/etc/sddm.conf</code> 里添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[Autologin]</span><br><span class="line">Session&#x3D;plasma</span><br><span class="line">User&#x3D;YOURNAME</span><br></pre></td></tr></table></figure>
+
+<h4 id="自动锁屏"><a href="#自动锁屏" class="headerlink" title="自动锁屏"></a>自动锁屏</h4><p>在 <code>$HOME/.xprofile</code> 里加入一行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export DESKTOP_LOCKED&#x3D;true</span><br></pre></td></tr></table></figure>
+
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>SDDM 是 KDE 默认的显示管理器（Display Manager），也就是图形登录界面，Manjaro KDE 也使用它作为默认登陆器，在开机后输入用户名密码的界面就是这个玩意。</p>
+<p>DM 和桌面环境是两个东西，桌面环境只能在用户登录后启动，没有 DM 的话，开机后用户就得对着黑漆漆的 tty 登录然后手动启动桌面环境，DM 给这个过程提供了一个图形界面。</p>
+<p>但由于它俩相互独立，他们的主题和缩放还有其他设置也都是独立的，尤其是 KDE 的锁屏功能，功能和 SDDM 相似，体验却好很多，有桌面的特效，主题，缩放甚至插件，而 SDDM，我甚至没找到设置缩放的办法。</p>
+<p>为此，一个简单的思路是用 KDE 的锁屏代替 SDDM，只需要两步：1）开机后自动登录；2）登录后自动锁屏。</p>
+<p>SDDM 提供自动登录功能，在设置里就能开启，但登录后自动锁屏就没有相应的选项了。</p>
+<p>网上很多人问过这个，大多数回答是写一个锁屏脚本，再让脚本自启动，这个方法可用，但也就只是可以用，KDE 需要先登录，进入桌面环境，然后再执行脚本，锁屏，都看到进入桌面环境了再锁屏有点脱裤子放屁的感觉。</p>
+<p>理想的方法是让 KDE 在进入桌面时就锁屏，负责这个的是KSMServer，运行 <code>ksmserver --help</code> 可以看到它提供了 <code>--lockscreen</code> 选项，可以在开启 session 时锁屏。</p>
+<p>现在的问题是，怎么让 KDE 在启动 KSMServer 时给它加参数。</p>
+<p>我看了下源码，KDE 是用 QT 写的，我不懂 QT，但它似乎不是用命令行启动的 KSMServer，好在代码里提供了另一个方法，它会检测环境变量 <code>DESKTOP_LOCKED</code>，当这个环境变量设置为 <code>true</code> 或 <code>1</code> 时，等效于 <code>--lockscreen</code>。</p>
+<p>网上也有人说在 <code>$HOME/.profile</code> 里加入 <code>export DESKTOP_LOCKED=yes</code>，还有人说往 <code>$HOME/.bashrc</code> 里加入 <code>export DESKTOP_LOCKED=1</code>，在看源码前我都试过，不管用，前者的问题在于那个 <code>yes</code>，就我看到的代码，应该将其设置为 <code>true</code> 或 <code>1</code> 才行，另外，SDDM 有一个脚本 Xsession，这个脚本会根据当前的 sh 选择执行一些文件，对于 bash，它会执行 <code>$HOME/.profile</code> 和 <code>$HOME/.bashrc</code>，我用的是 zsh，它会执行 <code>$HOME/.zprofile</code> 和 <code>$HOME/.zshrc</code>，所以这两个设置在我这都行不通。</p>
+<p>更好的方法是把 <code>export DESKTOP_LOCKED=true</code> 写进 <code>$HOME/.xprofile</code> 里，这个文件不受 sh 的影响，在任何情况都会执行。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>在看源码的过程中我发现 KSMServer 是会读取配置文件的，但这个配置文件保存和管理 session，以及 session 相关的设置，系统设置中也有相关的选项，修改的时候会改动这个文件，但不论是系统设置写入这个文件或是 KSMServer 读取这个文件，只会牵扯到 session 相关设置……</p>
+<p>但凡系统设置里加一个选项，KSMServer 里加两行代码，我就不用这么辛苦地查资料读源码了……</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/08/10/auto-lock-after-auto-login-with-KDE-and-SDDM/" data-id="ckdoiwsnz0002filvh6q6bwdx" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/02/16/install-linux-ck-kernal-and-nvidia-driver-in-manjaro/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">在 manjaro 上安装 linux-ck 和 nvidia 驱动</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/08/10/auto-lock-after-auto-login-with-KDE-and-SDDM/">SDDM 和 KDE 下自动登录并锁屏</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/16/install-linux-ck-kernal-and-nvidia-driver-in-manjaro/">在 manjaro 上安装 linux-ck 和 nvidia 驱动</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/27/how-to-improve-english-chinese/">读书笔记：怎样改进英式中文——论中文的常态与病态</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/27/gpg-keyserver-receive-failed-configuration-error/">gpg: keyserver receive failed: Configuration error</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/24/tencent-tim-in-manjaro/">在 Manjaro 中使用 Tim</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Lei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

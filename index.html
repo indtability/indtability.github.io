@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Journal to me</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Journal to me">
+<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:site_name" content="Journal to me">
+<meta property="og:locale">
+<meta property="article:author" content="Lei">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Journal to me" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.0.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Journal to me</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-auto-lock-after-auto-login-with-KDE-and-SDDM" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/08/10/auto-lock-after-auto-login-with-KDE-and-SDDM/" class="article-date">
+  <time datetime="2020-08-10T06:02:04.000Z" itemprop="datePublished">2020-08-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/10/auto-lock-after-auto-login-with-KDE-and-SDDM/">SDDM 和 KDE 下自动登录并锁屏</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR"></a>TL;DR</h2><h4 id="自动登录"><a href="#自动登录" class="headerlink" title="自动登录"></a>自动登录</h4><p>在系统设置里找到 Login Screen (SDDM)， 切到 Advanced 选项卡，设置自动登录即可。</p>
+<p>或者在 <code>/etc/sddm.conf</code> 里添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[Autologin]</span><br><span class="line">Session&#x3D;plasma</span><br><span class="line">User&#x3D;YOURNAME</span><br></pre></td></tr></table></figure>
+
+<h4 id="自动锁屏"><a href="#自动锁屏" class="headerlink" title="自动锁屏"></a>自动锁屏</h4><p>在 <code>$HOME/.xprofile</code> 里加入一行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export DESKTOP_LOCKED&#x3D;true</span><br></pre></td></tr></table></figure>
+
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>SDDM 是 KDE 默认的显示管理器（Display Manager），也就是图形登录界面，Manjaro KDE 也使用它作为默认登陆器，在开机后输入用户名密码的界面就是这个玩意。</p>
+<p>DM 和桌面环境是两个东西，桌面环境只能在用户登录后启动，没有 DM 的话，开机后用户就得对着黑漆漆的 tty 登录然后手动启动桌面环境，DM 给这个过程提供了一个图形界面。</p>
+<p>但由于它俩相互独立，他们的主题和缩放还有其他设置也都是独立的，尤其是 KDE 的锁屏功能，功能和 SDDM 相似，体验却好很多，有桌面的特效，主题，缩放甚至插件，而 SDDM，我甚至没找到设置缩放的办法。</p>
+<p>为此，一个简单的思路是用 KDE 的锁屏代替 SDDM，只需要两步：1）开机后自动登录；2）登录后自动锁屏。</p>
+<p>SDDM 提供自动登录功能，在设置里就能开启，但登录后自动锁屏就没有相应的选项了。</p>
+<p>网上很多人问过这个，大多数回答是写一个锁屏脚本，再让脚本自启动，这个方法可用，但也就只是可以用，KDE 需要先登录，进入桌面环境，然后再执行脚本，锁屏，都看到进入桌面环境了再锁屏有点脱裤子放屁的感觉。</p>
+<p>理想的方法是让 KDE 在进入桌面时就锁屏，负责这个的是KSMServer，运行 <code>ksmserver --help</code> 可以看到它提供了 <code>--lockscreen</code> 选项，可以在开启 session 时锁屏。</p>
+<p>现在的问题是，怎么让 KDE 在启动 KSMServer 时给它加参数。</p>
+<p>我看了下源码，KDE 是用 QT 写的，我不懂 QT，但它似乎不是用命令行启动的 KSMServer，好在代码里提供了另一个方法，它会检测环境变量 <code>DESKTOP_LOCKED</code>，当这个环境变量设置为 <code>true</code> 或 <code>1</code> 时，等效于 <code>--lockscreen</code>。</p>
+<p>网上也有人说在 <code>$HOME/.profile</code> 里加入 <code>export DESKTOP_LOCKED=yes</code>，还有人说往 <code>$HOME/.bashrc</code> 里加入 <code>export DESKTOP_LOCKED=1</code>，在看源码前我都试过，不管用，前者的问题在于那个 <code>yes</code>，就我看到的代码，应该将其设置为 <code>true</code> 或 <code>1</code> 才行，另外，SDDM 有一个脚本 Xsession，这个脚本会根据当前的 sh 选择执行一些文件，对于 bash，它会执行 <code>$HOME/.profile</code> 和 <code>$HOME/.bashrc</code>，我用的是 zsh，它会执行 <code>$HOME/.zprofile</code> 和 <code>$HOME/.zshrc</code>，所以这两个设置在我这都行不通。</p>
+<p>更好的方法是把 <code>export DESKTOP_LOCKED=true</code> 写进 <code>$HOME/.xprofile</code> 里，这个文件不受 sh 的影响，在任何情况都会执行。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>在看源码的过程中我发现 KSMServer 是会读取配置文件的，但这个配置文件保存和管理 session，以及 session 相关的设置，系统设置中也有相关的选项，修改的时候会改动这个文件，但不论是系统设置写入这个文件或是 KSMServer 读取这个文件，只会牵扯到 session 相关设置……</p>
+<p>但凡系统设置里加一个选项，KSMServer 里加两行代码，我就不用这么辛苦地查资料读源码了……</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/08/10/auto-lock-after-auto-login-with-KDE-and-SDDM/" data-id="ckdoiwsnz0002filvh6q6bwdx" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-install-linux-ck-kernal-and-nvidia-driver-in-manjaro" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/16/install-linux-ck-kernal-and-nvidia-driver-in-manjaro/" class="article-date">
+  <time datetime="2020-02-16T03:39:55.000Z" itemprop="datePublished">2020-02-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/16/install-linux-ck-kernal-and-nvidia-driver-in-manjaro/">在 manjaro 上安装 linux-ck 和 nvidia 驱动</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>linux-ck 是 AUR 和 linux-ck repo 里的包，包含一个打了 ck 补丁集的内核，ck 补丁集是 Con Kolivas 的作品，关于他和 ck 补丁集可以看<a target="_blank" rel="noopener" href="http://ck-hack.blogspot.com/">他的博客</a>。</p>
+<p>ck 对内核最主要的修改是调度器，它包含了一个叫做 MuQSS 的调度器，全称是 Multiple Queue Skiplist Scheduler，前身是 BFS，Brain Fuck Scheduler（是真的）。</p>
+<p>我对调度器的理解还停留在课堂，以及前两年做的ucore实验，给单核用的轮转队列之类，根据网上的资料，这是一个针对桌面环境，较少的 cpu 核心优化的调度器。</p>
+<p>根据我的理解，它的时间复杂度比 linux 默认的 CFS 调度器要高，但常数项却低（大概）。我们知道，时间复杂度和数据规模相关，数据规模确定的时候，时间复杂度就没有意义。桌面环境的 cpu 核心较少，进程数较少，可以看作数据规模确定，在这种情况下，时间复杂度较低的 CFS 反而不如自身开销小的 MuQSS，it does make sense。</p>
+<p>扯远了，拿出官方的介绍吧，这个调度器在桌面环境下有更好的交互和响应速度，完。</p>
+<h2 id="安装-linux-ck"><a href="#安装-linux-ck" class="headerlink" title="安装 linux-ck"></a>安装 linux-ck</h2><p>安装 linux-ck 有两种方式，一是在 AUR 上编译安装，我试了，没成功，就不出来现眼了，二是添加 linux-ck 源，下载编译好的包。</p>
+<p>先修改 <code>/etc/pacman.conf</code>，在末尾添加几行。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /etc/pacman.conf</span></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line">[repo-ck]</span><br><span class="line">Server = http://repo-ck.com/<span class="variable">$arch</span></span><br></pre></td></tr></table></figure>
+
+<p>导入 graysky 的签名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman-key -r 5EE46C4C &amp;&amp; pacman-key --lsign-key 5EE46C4C</span><br></pre></td></tr></table></figure>
+
+<p>然后安装相应 cpu 架构的包，不清楚自己 cpu 架构的可以运行这个查看</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gcc -c -Q -march=native --<span class="built_in">help</span>=target | grep march</span><br><span class="line"><span class="comment">#  -march=                               skylake</span></span><br><span class="line"><span class="comment">#  Known valid arguments for -march= option:</span></span><br></pre></td></tr></table></figure>
+
+<p>用 skylake 举例，运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -Syu linux-ck-skylate linux-ck-skylate-headers</span><br></pre></td></tr></table></figure>
+
+<p>到这里 linux-ck 就安装完了，至于 headers，是安装 dkms 驱动用的。</p>
+<h2 id="nvidia-dkms-驱动"><a href="#nvidia-dkms-驱动" class="headerlink" title="nvidia-dkms 驱动"></a>nvidia-dkms 驱动</h2><p>安装 AUR 中的 nvidia-beta-dkms，nvidia-utils-beta，lib32-nvidia-utils-beta，opencl-nvidia-beta 和 lib32-opencl-nvidia-beta 这五个包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yay -S nvidia-beta-dkms nvidia-utils-beta lib32-nvidia-utils-beta opencl-nvidia-beta lib32-opencl-nvidia-beta</span><br></pre></td></tr></table></figure>
+
+<p>安装过程会提示卸载之前的 nvidia 驱动，确定即可。</p>
+<p>最后重启一下就可以了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/02/16/install-linux-ck-kernal-and-nvidia-driver-in-manjaro/" data-id="ckdoiwso20006filv342l60eq" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-how-to-improve-english-chinese" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/01/27/how-to-improve-english-chinese/" class="article-date">
+  <time datetime="2020-01-27T08:04:17.000Z" itemprop="datePublished">2020-01-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/27/how-to-improve-english-chinese/">读书笔记：怎样改进英式中文——论中文的常态与病态</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>写过几篇日记，博客之后，发现自己的语文真的很烂，为了改善自己的语言和写作，我决定读一些书和文章。</p>
+<p>目前的想法是先做减法，写出简单而清晰的句子，有余力后，再做加法，让我的文字更好看些。</p>
+<p>余光中写的这篇《怎样改进英式中文——论中文的常态与病态》算是我做减法的第一步，减去西化。</p>
+<p>这篇文章写于1987年，比我还长十岁，依然能启发我。</p>
+<h2 id="笔记"><a href="#笔记" class="headerlink" title="笔记"></a>笔记</h2><p>余光中提到，中文的特点是措词简洁、句式灵活、声调铿锵，很多人（包括我）却化简为繁，以拙代巧。这算是抽象的提纲，后文再具体介绍。</p>
+<h3 id="名词"><a href="#名词" class="headerlink" title="名词"></a>名词</h3><p>英文好用名词，语法决定了名词占据句子中的主要地位，但中文的语法无此规定，可以更灵活一些。</p>
+<p>例如</p>
+<blockquote>
+<p>英文：他的收入的减少改变了他的生活方式。<br>中文：他收入减少，乃改变生活方式。</p>
+</blockquote>
+<p>英文中用名词做主语，中文却不必，可以用一件事（短句）做主语。</p>
+<p>更多的例子就不举了，参阅原文即可。</p>
+<p>另一个问题是伪术语(pseudo-jargon)，我的理解就是不说人话，把一些无需量化的词强行量化，获得仿佛科学的结果</p>
+<p>例如</p>
+<blockquote>
+<p>知名度：名气<br>前瞻性：远见<br>可读性：动人？引人入胜？好看？  </p>
+</blockquote>
+<p>我觉得这是缺乏词汇量导致的，企图用一个范式代替多变的词汇。滥用××主义也是同样的问题。</p>
+<p>最后一个问题是单复数，复数里是“们”字的误用，中文里很多词隐含复数，无需附带“们”之类的字。单数里是“之一”的泛滥，</p>
+<p>例如</p>
+<blockquote>
+<p>红楼梦是中国文学的名著之一。<br>（红楼梦是中国文学的名著）  </p>
+<p>李广乃汉朝名将之一。<br>（李广乃汉朝名将）</p>
+</blockquote>
+<h3 id="动词"><a href="#动词" class="headerlink" title="动词"></a>动词</h3><p>英文中常用弱动词+抽象名词代替原本的动词，如果说英语里这是趋势，放在中文里就是一场灾难。</p>
+<p>例如</p>
+<blockquote>
+<p>apply pressure: press<br>give authorization: permit</p>
+</blockquote>
+<p>冒号前后含义一致，现在的英语却似乎更倾向前者。很多人（也包括我）的中文也受到影响，“喜欢把简单明了的动词分解成「万能动词+抽象名词」的片词”。</p>
+<blockquote>
+<p>目前最流行的万能动词，是「作出」和「进行」，恶势力之大，几乎要吃掉一半的正规动词。请看下面的例子：  </p>
+<p>本校的校友对社会作出了重大的贡献。<br>（本校的校友对社会贡献很大。）  </p>
+<p>我们对国际贸易的问题已经进行了详细的研究。<br>（我们对国际贸易的问题已经详加研究。）  </p>
+</blockquote>
+<p>动词里的另一种中文西化是被动语态，在可以用主动语态的时候生硬地改为被动语态。原因可能是过于重视句中的主体，忽略了句子本身的结果。</p>
+<p>例</p>
+<blockquote>
+<p>他被怀疑偷东西。<br>（他有偷东西的嫌疑）<br>他这意见不被人们接受。<br>人们不接受他的意见。</p>
+</blockquote>
+<h3 id="连接词"><a href="#连接词" class="headerlink" title="连接词"></a>连接词</h3><p>余光中提到滥用“和，与，及“等而少见”而，并，且“等词，我似乎没这个问题，起码不严重，就此略过。</p>
+<h3 id="介词"><a href="#介词" class="headerlink" title="介词"></a>介词</h3><p>介词在英文中是必需品，润滑剂，中文里却显得累赘。尤其是“有关，关于，由于”等词。</p>
+<p>不举例子了，多加注意。</p>
+<h3 id="副词"><a href="#副词" class="headerlink" title="副词"></a>副词</h3><p>即滥用“地”的问题，在一些成语后面加“地”，使之变成副词，含义重复，也显得呆板。</p>
+<blockquote>
+<p>他苦心孤诣地想出一套好办法来。<br>（他苦心孤诣，想出一套好办法。）</p>
+<p>老师苦口婆心地劝了他半天。<br>（老师苦口婆心，劝了他半天）  </p>
+<p>大家苦中作乐地竟然大唱其民谣。<br>（大家苦中作乐，竟然大唱其民谣）  </p>
+</blockquote>
+<p>最滥用的恐怕就是“成功地”，做到就是做到，就已经是成功了，再加一个“成功地”，着实累赘。</p>
+<h3 id="形容词"><a href="#形容词" class="headerlink" title="形容词"></a>形容词</h3><p>形容词里就是滥用“的”。这里拿朱自清的《荷塘月色》举例子：</p>
+<blockquote>
+<p>月光是隔了树照过来<strong>的</strong>，高处丛生<strong>的</strong>灌木，落下参差<strong>的</strong>斑驳<strong>的</strong>黑影，峭楞楞如鬼一般；弯弯<strong>的</strong>杨柳<strong>的</strong>稀疏<strong>的</strong>倩影，却又像是画在荷叶上。</p>
+</blockquote>
+<p>（余光中还专门批评过朱自清的《荷塘月色》，哈哈）</p>
+<p>看着改吧。</p>
+<p>形容词还有个类似名词的问题，就是用类似学术的抽象名词。</p>
+<blockquote>
+<p>难度很高的技巧<br>（很难的技巧）  </p>
+<p>热情型的人<br>（热情的人）  </p>
+</blockquote>
+<p>还有就是形容词在句子中的位置，放在名词前，叫前饰，放在名词后，叫后饰。前饰直接封闭却冗长，后饰弹性开放且自然，前饰过长时，可以考虑用后饰。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/01/27/how-to-improve-english-chinese/" data-id="ckdoiwso20005filv0in518bz" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-gpg-keyserver-receive-failed-configuration-error" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/01/27/gpg-keyserver-receive-failed-configuration-error/" class="article-date">
+  <time datetime="2020-01-26T17:31:51.000Z" itemprop="datePublished">2020-01-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/27/gpg-keyserver-receive-failed-configuration-error/">gpg: keyserver receive failed: Configuration error</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>在用yay安装aur上的软件时提示<code>gpg: keyserver receive failed: Configuration error</code>。</p>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>是的，我还是那个newbie，在网上搜索时找不到答案，似乎没人遇到过<code>Configuration error</code>，我的解决方案简单粗暴，删去<code>~/gnupg</code>即可。<br><strong>副作用不明</strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/01/27/gpg-keyserver-receive-failed-configuration-error/" data-id="ckdoiwso10004filvg7hs9q3m" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-tencent-tim-in-manjaro" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/01/24/tencent-tim-in-manjaro/" class="article-date">
+  <time datetime="2020-01-24T04:01:30.000Z" itemprop="datePublished">2020-01-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/24/tencent-tim-in-manjaro/">在 Manjaro 中使用 Tim</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="2020-04-21更新"><a href="#2020-04-21更新" class="headerlink" title="2020-04-21更新"></a>2020-04-21更新</h2><p>deepin-wine-tim 这个包更新到了3.0版本，随之而来的是难以忍受的卡顿和崩溃，尝试降级到2.X版本也没有解决问题，无奈之下只能换成 deepin.com.qq.office 这个包。</p>
+<p>就我的印象中，在写这篇文章的时候，AUR 里没有 deepin.com.qq.office 这个包，因此我仅仅将 deepin-wine-tim 中启动脚本里的 wine 换成了 deepin-wine，在这次卡顿之后才发现，不知何时有人提交了 deepin.com.qq.office 这个包。</p>
+<p>安装好试用了一下才发现，这两个包之间的区别远比将 wine 换成 deepin-wine 的区别要大，除了比 deepin-wine-tim 流畅和稳定许多之外，在 deepiin.com.qq.office 中，点击链接或者文件，不再会打开 wine 自带的那些残废软件了，而是会打开系统中相对应的默认软件，这让 Tim 在 linux 下有了近乎原生的体验，感谢 deepin 的开发组。</p>
+<p>唯一美中不足的地方，还是之前就提到过的，字体发虚问题，在折腾了几天之后，总算找到了解决办法。</p>
+<p>一是之前提到的 lib32-freetype2-infinality-ultimate 这个包，用这个包替代 lib32-freetype2 可以让非衬线字体变得圆润饱满，起码不会像狗吭过一样。</p>
+<p>但对于天杀的宋体，它就一点办法都没有，所以下一步就是修改注册表，替换掉宋体。</p>
+<blockquote>
+<p>我的环境或许有些特殊，我软链接了 Windows 系统的字体文件夹到 Manjaro 下，又在设置里禁用了微软雅黑系列字体。<br>不清楚是否因为这些原因才导致 Tim 中的字体 fallback 回了宋体。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WINEPREFIX=~/.deepinwine/Deepin-TIM deepin-wine regedit</span><br></pre></td></tr></table></figure>
+
+<p>打开注册表之后找到<code>[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\FontSubstitutes]</code>，然后添加一个字符串类型的键，名称为SimSun，值为替换字体的名称，我的是 Sarasa Gothic CL，对于其他人，可以使用系统默认字体，或替换成这个包所依赖的 wqy-microhei 字体，我不清楚字体名称是什么，有需要可以自己在系统里查看。</p>
+<p>网络上很多教程提到修改<code>[HKEY_CURRENT_USER\Software\Wine\Fonts\Replacements]</code>的值，来达成替换字体的效果，不知为何，在我这里没有用，或许是个例，或许是版本问题，仅供参考。</p>
+<p>唯一的遗憾在于群昵称仍然是发虚的类宋体的字体，我不知道那是不是宋体，如果是，说明这个方法替换仍不够彻底，期待更好的方法，如果不是，那是否可以找到它的字体名称再次替换呢？</p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>把主力系统换成Manjaro时，常用的国产软件成了最大的阻力，还有一些Windows下的小工具（比如Steamcommunity304）之类的，QQ微信更是重中之重。</p>
+<p>Manjaro是Arch的下游发行版，自然可以使用AUR，AUR是个好东西，  起码目前我需要的软件都能在这里面找到，其中就包括打包好的deepin-wine-tim，不过网上有人说这个deepin-wine-tim依赖原生wine，会崩溃掉线无法记住密码，用依赖deepin-wine的deepin.com.qq.office，或修改deepin-wine-tim使之调用deepin-wine就不会有问题。</p>
+<p>我没发现崩溃掉线，没法记住密码倒是真的，这让我有了换成deepin-wine的念头，然而换成调用deepin-wine后产生了另一个问题——字体发虚到没法接受，网络上给出的解决方法是用lib32-freetype2-infinality-ultimate代替lib32-freetype2，我试了，效果不显（刚才看到它在一月初更新了，不知道是否有所改善）。</p>
+<p>但我发现，只要用deepin-wine启动tim登陆一次，并选择记住密码，用原生wine也能启动并使用记住的密码。</p>
+<p>下面是使用deepin-wine启动Tim的方法。</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><p>修改/opt/deepinwine/apps/Deepin-TIM/run.sh</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#/opt/deepinwine/apps/Deepin-TIM/run.sh</span></span><br><span class="line">......</span><br><span class="line">WINE_CMD=<span class="string">&quot;deepin-wine&quot;</span></span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p>对于非gnome系的桌面，需要安装gnome-settings-daemon，并启动之，否则deepin-wine打不开。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pacman -S gnome-settings-daemon</span><br><span class="line">/usr/lib/gsd-xsettings</span><br></pre></td></tr></table></figure>
+
+<p>然后登陆即可，记得选择记住密码。</p>
+<p>关闭Tim和gsd-xsettings，并修改/opt/deepinwine/apps/Deepin-TIM/run.sh。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#/opt/deepinwine/apps/Deepin-TIM/run.sh</span></span><br><span class="line">......</span><br><span class="line">WINE_CMD=<span class="string">&quot;wine&quot;</span></span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ul>
+<li><p>在关闭Tim和gsd-xsettings，并修改了run.sh后，立即启动Tim字体还是发虚，需要重启才能恢复。</p>
+</li>
+<li><p>如果使用deepin-wine安装Tim，安装好的Tim不能用wine打开，反之可以，所以希望日常用wine的话，不要deepin-wine安装，对于已经装好的，可以删掉<code>~/.deepinwine/Deepin-TIM</code>后重新安装。</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/01/24/tencent-tim-in-manjaro/" data-id="ckdoiwso30007filv3xbxf8ya" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-dial-up-in-manjaro" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/01/21/dial-up-in-manjaro/" class="article-date">
+  <time datetime="2020-01-21T11:45:12.000Z" itemprop="datePublished">2020-01-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/21/dial-up-in-manjaro/">Manjaro 通过无线网络拨号上网</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>又开始写博客了，前几次总是想着正式一点，写一些大而全的东西，目标定得太高就会难以为继。这次换一个目标，写一些小而碎的东西。</p>
+<p>在折腾，学习过程中遇到的困难，花了时间去搜索，解决或没解决的问题，一些算不上是知识的trick之类的东西，都记录下来，算是给我记性的一点补充，有可能的话，也希望能给不小心找到这里的人提供一点帮助。</p>
+<p>这次是在linux下拨号上网的方法。</p>
+<p>前段时间换了Manjaro作为主力系统，但校园网使用pppoe拨号验证，KDE似乎没打算让用户在无线网络下拨号，新建了一个DSL，却完全找不到连接的选项，手头没有网线，也不打算用网线，上网搜了一下，似乎没人觉得这是个问题，都说用pppd就能拨号了，网上方法有很多，但似乎都是用不同的方法配置和调用pppd。</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><p>在<code>/etc/ppp/peers/</code>目录下新建一个文件，这里命名为provider，内容如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /etc/ppp/peers/provider</span></span><br><span class="line"><span class="comment"># 用ip link 查看无线网卡名称，替换wlp3s0</span></span><br><span class="line">plugin rp-pppoe.so wlp3s0</span><br><span class="line">hide-password</span><br><span class="line">noauth</span><br><span class="line">defaultroute</span><br><span class="line">noipdefault</span><br><span class="line">usepeerdns</span><br><span class="line"><span class="comment"># username是拨号用的用户名</span></span><br><span class="line">user <span class="string">&quot;username&quot;</span></span><br><span class="line">name <span class="string">&quot;username&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>修改<code>/etc/ppp/pap-secrets</code>添加一行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /etc/ppp/pap-secrets</span></span><br><span class="line"><span class="comment"># username是拨号用的用户名，password是拨号的密码</span></span><br><span class="line"><span class="string">&quot;username&quot;</span>        *       <span class="string">&quot;password&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后执行<code>pppd call provider</code>就可以了。需要root权限。</p>
+<p>方法似乎没有问题，输出和日志都说连接上了，却始终不能上网，我算是个newbie，对linux不太熟，甚至开始怀疑pppd有问题，抓了Manjaro和Windows上拨号的包，对着PPPoE的RFC上去查。哈哈，这算是新手最常犯的错误，得不到想要的结果就怀疑是底层有问题。</p>
+<p>pppoe是在ip层下的协议，Windows上的拨号和pppd在拨号成功后都会虚拟一个网络适配器，拨号成功却不能上网的原因在于没有配置好路由表，数据包依然发往无线适配器而不是虚拟的PPPoE适配器，因此，修改一下路由表就能解决问题。</p>
+<p>执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 用ip addr查看拨号产生的虚拟适配器和网关地址，分别替换下面的ppp0和10.101.0.1</span></span><br><span class="line">ip route add default via 10.101.0.1 dev ppp0</span><br></pre></td></tr></table></figure>
+
+<p>然后就可以上网了</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/01/21/dial-up-in-manjaro/" data-id="ckdoiwso00003filvf8hr78ag" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/01/20/hello-world/" class="article-date">
+  <time datetime="2020-01-20T05:08:04.000Z" itemprop="datePublished">2020-01-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/20/hello-world/">Hello World</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/01/20/hello-world/" data-id="ckdoiubss000082lvd469cmem" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/08/10/auto-lock-after-auto-login-with-KDE-and-SDDM/">SDDM 和 KDE 下自动登录并锁屏</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/16/install-linux-ck-kernal-and-nvidia-driver-in-manjaro/">在 manjaro 上安装 linux-ck 和 nvidia 驱动</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/27/how-to-improve-english-chinese/">读书笔记：怎样改进英式中文——论中文的常态与病态</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/27/gpg-keyserver-receive-failed-configuration-error/">gpg: keyserver receive failed: Configuration error</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/24/tencent-tim-in-manjaro/">在 Manjaro 中使用 Tim</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Lei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
